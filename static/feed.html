@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+    <form action="/feed" method="post">
+        <input type="text" name="userPost" id="userPost" placeholder="Enter a post :" required=""><br>
+        <div class="buttonTest">
+            <input type="submit" value="POST">
+        </div>
+    </form>
+    <div id="app">
+        <post-component v-for="post in posts" :post="post" />
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="app.js"></script>
+</body>
+
+
+</html>
