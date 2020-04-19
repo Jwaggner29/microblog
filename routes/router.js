@@ -83,66 +83,64 @@ router.get('/profile', function (req, res, next) {
             }
         });
 });
-
 router.get('/feed', function (req, res, next) {
-    var authorList = [];
-    var postList = [];
-    var htmlresponse = '<body style ="background-color: bisque;"> <form action="/feed" method="post"><input type="text" name="userPost" id="userPost" placeholder="Enter a post " required=""><br><div class="buttonTest"> <input type="submit" value="Submit Post"></div></form></body>';
-
-    function done(authorList, postList) {
-        var response = htmlresponse;
-
-        for (var i = postList.length - 1; i >= 0; i--) {
-            response += "<strong> " + authorList[i] + "</strong><br>";
-            response += "<small>" + postList[i] + "</small><br><br>";
-            console.log(authorList[i] + " : " + postList[i]);
-            console.log(i);
-        }
-        response += '<br><a type="button" href="/logout">Logout</a>'
-        return res.send(response);
-    }
-    Posts.find({}, function (err, posts) {
-        if (err) {
-            return next(err);
-        } else {
-            posts.forEach(function (post, i) {
-                User.findById(post.author).exec(function (error, author) {
-                    if (error) {
-                        console.log("Hoping I don't ever see this");
-                        return next(error);
-                    } else {
-                        authorList[i] = author.username;
-                        postList[i] = post.body;
-                    }
-                    if (posts.length - 1 === i) {
-                        done(authorList, postList);
-                    }
-                });
-            })
-        }
-    });
-
-});
-
-router.post('/feed', function (req, res, next) {
-    console.log('FEED POST SENT!');
-    if (req.body.userPost) {
-        console.log('inside if');
-        var postData = {
-            body: req.body.userPost,
-            author: req.session.userId
-        }
-
-        Posts.create(postData, function (error, user) {
+    User.findById(req.session.userId)
+        .exec(function (error, user) {
             if (error) {
                 return next(error);
             } else {
-                return res.redirect('/feed');
+                if (user === null) {
+                    var err = new Error('Not authorized! Go back!');
+                    err.status = 400;
+                    return next(err);
+                } else {
+                    let pageString = '<br><strong>Host a Party!</strong><body style ="background-color: bisque;"> <form action="/feed" method="post"><textarea name="universityPost" id="universityPost" rows = "1" cols = "30" placeholder="Enter university name " required=""></textarea><textarea name="addressPost" id="addressPost" rows = "1" cols = "30" placeholder="Enter address" required=""></textarea><textarea name="datePost" id="datePost" rows = "1" cols = "30" placeholder="Enter date" required=""></textarea><br><div class="buttonTest"> <input type="submit" value="Submit Post"></div></form></body>';
+                    Posts.find({}).exec(function (err, posts) {
+                        for (var i in posts) {
+                            pageString += '<div class="ThePost" style=" width: 45%;"><div class="boder" style="outline : 3px solid; text-align: left;"><small> Host : ' + posts[i].author + '</small><br><br><strong> Date : ' + posts[i].date + '</strong><br><br><strong> University : ' + posts[i].university + '</strong><br><br><strong> Address : ' + posts[i].address + '</strong><br><br><strong> Attending : ' + posts[i].attendees + '</strong><br></div><br><br></div>';
+                        }
+                        return res.send(pageString);
+                    });
+                }
             }
         });
-    }
 });
 
+router.post('/feed', function (req, res, next) {
+    User.findById(req.session.userId)
+        .exec(function (error, user) {
+            if (error) {
+                return next(error);
+            } else {
+                if (user === null) {
+                    var err = new Error('Not authorized. Please go back.');
+                    err.status = 404;
+                    return next(err);
+                } else {
+                    console.log(req.body.post);
+                    console.log(user.username);
+                    var postData = {
+                        author: user.username,
+                        //TEMP CHANGE LATER
+                        address: req.body.addressPost,
+                        university: req.body.universityPost,
+                        date: req.body.datePost,
+                        //address: "2779 Bedford Street",
+                        //university: "University of Pittsburgh at Johnstown",
+                        attendees: "0",
+                    }
+                    Posts.create(postData, function (error, posted) {
+                        if (error) {
+                            return next(error);
+                        } else {
+                            return res.redirect('/feed');
+                        }
+                    });
+
+                }
+            }
+        });
+});
 // GET for logout logout
 router.get('/logout', function (req, res, next) {
     if (req.session) {

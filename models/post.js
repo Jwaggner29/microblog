@@ -3,14 +3,20 @@ var bcrypt = require('bcrypt');
 var User = require('../models/user');
 
 var PostSchema = new mongoose.Schema({
-    body: String,
-    created: {
-        type: Date,
-        default: Date.now
-    },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserSchema'
+        type: String
+    },
+    address: {
+        type: String
+    },
+    university: {
+        type: String
+    },
+    date: {
+        type: String
+    },
+    attendees: {
+        type: String
     }
 
 });

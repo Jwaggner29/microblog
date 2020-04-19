@@ -12,7 +12,7 @@ const db = mongoose.connection;
 //handle error
 db.on('error', console.error.bind(console, 'connection error: '));
 db.once('open', function () {
-    console.log("Connected to database");
+    console.log("Connected to database!");
 });
 
 //Session for tracking logins 
