@@ -101,27 +101,30 @@ router.get('/feed', function (req, res, next) {
         response += '<br><a type="button" href="/logout">Logout</a>'
         return res.send(response);
     }
-    Posts.find({}, function (err, posts) {
-        if (err) {
-            return next(err);
-        } else {
-            posts.forEach(function (post, i) {
-                User.findById(post.author).exec(function (error, author) {
-                    if (error) {
-                        console.log("Hoping I don't ever see this");
-                        return next(error);
-                    } else {
-                        authorList[i] = author.username;
-                        postList[i] = post.body;
-                    }
-                    if (posts.length - 1 === i) {
-                        done(authorList, postList);
-                    }
-                });
-            })
-        }
-    });
-
+    if (!Posts) {
+        return res.send(htmlresponse);
+    } else {
+        Posts.find({}, function (err, posts) {
+            if (err) {
+                return next(err);
+            } else {
+                posts.forEach(function (post, i) {
+                    User.findById(post.author).exec(function (error, author) {
+                        if (error) {
+                            console.log("Hoping I don't ever see this");
+                            return next(error);
+                        } else {
+                            authorList[i] = author.username;
+                            postList[i] = post.body;
+                        }
+                        if (posts.length - 1 === i) {
+                            done(authorList, postList);
+                        }
+                    });
+                })
+            }
+        });
+    }
 });
 
 router.post('/feed', function (req, res, next) {
