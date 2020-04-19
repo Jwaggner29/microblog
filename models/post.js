@@ -4,8 +4,7 @@ var User = require('../models/user');
 
 var PostSchema = new mongoose.Schema({
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'UserSchema'
+        type: String
     },
     address: {
         type: String
@@ -13,10 +12,13 @@ var PostSchema = new mongoose.Schema({
     university: {
         type: String
     },
-    atendees: {
-        type: int
+    date: {
+        type: String
+    },
+    attendees: {
+        type: String
     }
-    
+
 });
 const Posts = mongoose.model('Posts', PostSchema);
 module.exports = Posts;
