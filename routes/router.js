@@ -20,6 +20,7 @@ router.get('/', function (req, res, next) {
 //POST route for updating data
 router.post('/', function (req, res, next) {
     // confirm that user typed same password twice
+
     if (req.body.password !== req.body.passwordConf) {
         var err = new Error('Passwords do not match.');
         err.status = 400;
@@ -30,12 +31,14 @@ router.post('/', function (req, res, next) {
     if (req.body.email &&
         req.body.username &&
         req.body.password &&
-        req.body.passwordConf) {
+        req.body.passwordConf &&
+        req.body.dln) {
 
         var userData = {
             email: req.body.email,
             username: req.body.username,
             password: req.body.password,
+            dln: req.body.dln
         }
 
         User.create(userData, function (error, user) {
@@ -78,7 +81,7 @@ router.get('/profile', function (req, res, next) {
                     return next(err);
                 } else {
                     console.log("Profile dir name : " + __dirname);
-                    return res.send('<h1>Name: </h1>' + user.username + '<h2>Mail: </h2>' + user.email + '<br><a type="button" href="/logout">Logout</a>' + '<br><a type="button" href="/feed">Go To Feed</a>');
+                    return res.send('<html><br><a type="button" href="/feed" style = "float:right;margin-right: 5px;">View Feed</a>  <a type="button" href="/logout" style = "margin-right: 5px;float:right;"> Logout</a> <div class = "container"><div class = "profileContainer" style = "right:50%;content-align:center; text-align:center;"><h2>Logged in as :  </strong>' + user.username + '</strong> </div> </div> ');
                 }
             }
         });
@@ -94,10 +97,10 @@ router.get('/feed', function (req, res, next) {
                     err.status = 400;
                     return next(err);
                 } else {
-                    let pageString = '<br><strong>Host a Party!</strong><body style ="background-color: bisque;"> <form action="/feed" method="post"><textarea name="universityPost" id="universityPost" rows = "2" cols = "30" placeholder="Enter university name " required=""></textarea><textarea name="addressPost" id="addressPost" rows = "2" cols = "30" placeholder="Enter address" required=""></textarea><textarea name="datePost" id="datePost" rows = "2" cols = "30" placeholder="Enter date" required=""></textarea><br><div class="buttonTest"> <input type="submit" value="Submit Post"></div></form></body>';
+                    let pageString = '<br><a type="button" href="/profile" style = "float:right;margin-right: 5px;">Profile</a>  <a type="button" href="/logout" style = "margin-right: 5px;float:right;">Logout</a><br><strong>Host a Party!</strong><body style = "background-image: url(cityscape2.jpg);"> <form action="/feed" method="post"><textarea name="universityPost" id="universityPost" rows = "2" cols = "30" placeholder="Enter university name " required=""></textarea><textarea name="addressPost" id="addressPost" rows = "2" cols = "30" placeholder="Enter address" required=""></textarea><textarea name="datePost" id="datePost" rows = "2" cols = "30" placeholder="Enter date" required=""></textarea><br><div class="buttonTest"> <input type="submit" value="Submit Post"></div></form></body>';
                     Posts.find({}).exec(function (err, posts) {
                         for (var i in posts) {
-                            pageString += '<div class="ThePost" style=" width: 45%;"><div class="boder" style="outline : 3px solid; text-align: left;"><small> Host : ' + posts[i].author + '</small><br><br><strong> Date : ' + posts[i].date + '</strong><br><br><strong> University : ' + posts[i].university + '</strong><br><br><strong> Address : ' + posts[i].address + '</strong><br><br><strong> Attending : ' + posts[i].attendees + '</strong><br></div><br><br></div>';
+                            pageString += '<div class="ThePost" style=" width: 45%;"><div class="boder" style="outline : 3px solid grey; text-align: left;"><small> Host : ' + posts[i].author + '</small><br><br><strong> Date : ' + posts[i].date + '</strong><br><br><strong> University : ' + posts[i].university + '</strong><br><br><strong> Address : ' + posts[i].address + '</strong><br><br><strong> Attending : ' + posts[i].attendees + '</strong><br></div><br><br></div>';
                         }
                         return res.send(pageString);
                     });

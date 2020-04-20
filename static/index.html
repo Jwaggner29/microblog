@@ -5,11 +5,11 @@
 
 </head>
 
-<body style="background-color: bisque;">
-    <h1 style="text-align: center;">Welcome to Microblogging</h1>
+<body style="background-image: url(cityscape.jpg);">
+    <h1 style="text-align: center;">Social Gathering Finder</h1>
     <div class="container">
-        <div class="login-form" style="float: left; width: 50%;">
-            <div class="logContainer" style="top: 50%;left: 50%;text-align: center;">
+        <div class="login-form" style="float: left; width: 50%; ">
+            <div class="logContainer" style="top: 50%;left: 50%;text-align: center; ">
                 <h3> LOGIN HERE </h3>
                 <form action="/" method="post">
                     <input type="text" name="logemail" placeholder="E-mail" required=""><br>
@@ -28,9 +28,11 @@
                 <form id="login" action="/" method="post" onsubmit="event.preventDefault(); validateMyForm();">
                     <input type="text" name="email" placeholder="E-mail" required=""><br>
                     <input type="text" name="username" placeholder="Username" required=""><br>
+                    <input type="text" name="dln" placeholder="Driver's License #" required=""><br>
                     <input type="password" name="password" placeholder="Password" id="password" required=""><br>
                     <input type="password" name="passwordConf" placeholder="Confirm Password" id="password_conf"
                         required=""><br>
+
                     <input type="submit" value="REGISTER">
                 </form>
             </div>
