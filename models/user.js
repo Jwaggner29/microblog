@@ -22,6 +22,9 @@ var UserSchema = new mongoose.Schema({
         unique: true,
         required: true,
     },
+    attending: {
+        type: String
+    }
 });
 
 //authenticate input against database
