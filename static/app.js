@@ -1,6 +1,5 @@
 const authorList = [];
 const postList = [];
-console.log("issa mircale");
 Vue.component('post-component', {
     template: '<div class = "post"> <div class = "box"> <div class = "media-content"> <div class = "content"> <p> <strong> {{author.username}} </strong> <br> <small>{{post.body}} </small><br> </p> </div> </div> </div> </div>',
     props: {

@@ -21,9 +21,6 @@ var UserSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true,
-    },
-    attending: {
-        type: String
     }
 });
 

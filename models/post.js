@@ -14,9 +14,6 @@ var PostSchema = new mongoose.Schema({
     },
     date: {
         type: String
-    },
-    attendees: {
-        type: String
     }
 
 });
